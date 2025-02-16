@@ -1,5 +1,16 @@
+"use client";
+import { useEffect, useState } from "react";
+
+
 export default function Login()
 {
+  const [clientReady, setClientReady] = useState(false);
+
+  useEffect(() => {
+    setClientReady(true);
+  }, []);
+
+  if (!clientReady) return null;
   return (
   <main>
     <div >
