@@ -1,8 +1,11 @@
-<h1><b>Gamedoora Hackathon</b></h1><br /> 
+<h1><b>Gamedoora Hackathon</b></h1>
+
 Tech Stack <br />
-Frontend: Next.js (Containerized) + Tailwind CSS <br />
-Backend: MongoDB <br />
-Deployment: GitHub Pages <br />
+<ul>
+<li>Frontend: Next.js (Containerized) + Tailwind CSS </li>
+<li>Backend: MongoDB </li>
+<li>Deployment: GitHub Pages </li>
+</ul>
 A hackathon focused on creating a high-performance login and profile page for Gamedoora, a platform designed to foster collaboration to bring ideas to life in the form of games. The login page will have to showcase the key aspects and philosophy of the platform, while the profile page will need to showcase user skills in an engaging and visually informative manner, along with key aspects of the individual and their socials.
 <br />
 First, run the development server:
