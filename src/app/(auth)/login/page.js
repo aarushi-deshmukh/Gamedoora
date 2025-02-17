@@ -74,8 +74,8 @@ export default function Login()
         </form>
         {message && <p className="mt-4 text-center">{message}</p>}
         <p className="mt-4 text-center text-gray-500 text-sm">
-          Forgot your password?{" "}
-          <a href="/reset-password" className="text-indigo-600 hover:underline">Reset here</a>
+          Already have an account?{" "}
+          <a href="/signup" className="text-indigo-600 hover:underline">Sign Up here</a>
         </p>
       </div>
     </div>

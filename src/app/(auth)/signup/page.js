@@ -22,7 +22,7 @@ export default function SignupPage() {
     e.preventDefault();
     setMessage("");
 
-    const res = await fetch("/api/signup", {
+    const res = await fetch("/api/auth/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
@@ -30,9 +30,9 @@ export default function SignupPage() {
 
     const data = await res.json();
     if (res.ok) {
-      setMessage("Signup successful! ✅");
+      setMessage("Sign-up successful! ✅");
     } else {
-      setMessage(data.error || "Signup failed ❌");
+      setMessage(data.error || "Sign-up failed ❌");
     }
   };
 
@@ -147,7 +147,7 @@ export default function SignupPage() {
             Sign Up
           </button>
 
-          {message && <p className="mt-3 text-center text-sm">{message}</p>}
+          {message && <p className="mt-3 text-center text-sm text-black">{message}</p>}
 
           <p className="mt-4 text-center text-gray-500 text-sm">
             Already have an account?{" "}
