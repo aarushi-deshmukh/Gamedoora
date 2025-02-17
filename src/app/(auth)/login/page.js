@@ -1,15 +1,14 @@
 "use client";
 import { useState } from "react";
 
-
-export default function Login()
-{
+export default function Login() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
   const [message, setMessage] = useState("");
+  const [loginAttempts, setLoginAttempts] = useState(0); // Track failed attempts
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -28,17 +27,18 @@ export default function Login()
     const data = await res.json();
     if (res.ok) {
       setMessage("Login successful! ✅");
+      setLoginAttempts(0); // Reset on successful login
     } else {
       setMessage(data.error || "Login failed ❌");
+      setLoginAttempts((prev) => prev + 1); // Increase failed attempts
     }
   };
 
   return (
-  <main>
-    <div>
+    <main>
       <div>
-      <h1 className="text-3xl font-bold text-gray-800 text-center m-5">Login</h1>
-      <form className="space-y-4" onSubmit={handleSubmit}>
+        <h1 className="text-3xl font-bold text-gray-800 text-center m-5">Login</h1>
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <label className="block text-sm font-medium text-gray-700">Username</label>
             <input
@@ -47,7 +47,7 @@ export default function Login()
               placeholder="Email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full p-2 border rounded"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 outline-none text-black"
               required
             />
           </div>
@@ -60,7 +60,7 @@ export default function Login()
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full p-2 border rounded"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 outline-none text-black"
               required
             />
           </div>
@@ -72,12 +72,23 @@ export default function Login()
             Login
           </button>
         </form>
+
         {message && <p className="mt-4 text-center">{message}</p>}
+
+        {loginAttempts >= 2 && (
+          <p className="mt-4 text-center text-red-600 text-sm">
+            Forgot your password?{" "}
+            <a href="/forgot-password" className="text-indigo-600 hover:underline">
+              Reset here
+            </a>
+          </p>
+        )}
+
         <p className="mt-4 text-center text-gray-500 text-sm">
           Already have an account?{" "}
           <a href="/signup" className="text-indigo-600 hover:underline">Sign Up here</a>
         </p>
       </div>
-    </div>
-  </main>);
+    </main>
+  );
 }
