@@ -1,15 +1,17 @@
 import { NextResponse } from "next/server";
-import connectDB from "@/lib/mongo";
-import User from "@/models/User";
+import connectDB from "../../../../lib/mongo"; 
+import User from "../../../../models/User";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"; 
 
 export async function POST(req) {
   try {
     await connectDB();
-    const { email, password } = await req.json();
 
-    // Validate input
+    // Ensure the request is in JSON format
+    const body = await req.json();
+    const { email, password } = body;
+
     if (!email || !password) {
       return NextResponse.json({ error: "Both email and password are required." }, { status: 400 });
     }
@@ -29,7 +31,17 @@ export async function POST(req) {
     // Generate JWT token
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-    return NextResponse.json({ message: "Login successful!", token }, { status: 200 });
+    // Send token & user info (excluding password)
+    return NextResponse.json({ 
+      message: "Login successful!", 
+      token,
+      user: {
+        id: user._id,
+        email: user.email,
+        name: user.name, // Assuming your user model has a "name" field
+      }
+    }, { status: 200 });
+
   } catch (error) {
     console.error("Login error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

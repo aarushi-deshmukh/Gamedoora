@@ -18,7 +18,7 @@ export default function Login() {
     e.preventDefault();
     setMessage("");
 
-    const res = await fetch("/api/login", {
+    const res = await fetch("/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
@@ -73,20 +73,17 @@ export default function Login() {
           </button>
         </form>
 
-        {message && <p className="mt-4 text-center">{message}</p>}
+        {message && <p className="mt-4 text-center text-black">{message}</p>}
 
         {loginAttempts >= 2 && (
-          <p className="mt-4 text-center text-red-600 text-sm">
-            Forgot your password?{" "}
-            <a href="/forgot-password" className="text-indigo-600 hover:underline">
-              Reset here
+            <a href="/forgot-password" className="text-indigo-600 hover:underline mt-4 text-center text-sm">
+            Forgot password?
             </a>
-          </p>
         )}
 
         <p className="mt-4 text-center text-gray-500 text-sm">
-          Already have an account?{" "}
-          <a href="/signup" className="text-indigo-600 hover:underline">Sign Up here</a>
+          Create new account?{" "}
+          <a href="/signup" className="text-indigo-600 hover:underline">Sign-Up</a>
         </p>
       </div>
     </main>
