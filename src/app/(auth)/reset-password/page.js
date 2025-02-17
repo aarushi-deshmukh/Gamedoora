@@ -10,7 +10,7 @@ export default function ResetPassword()
             <label className="block text-sm font-medium text-gray-700">New Password</label>
             <input
               type="password"
-              placeholder="Enter your username"
+              placeholder="New Password"
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 outline-none text-black"
               required
             />
@@ -20,7 +20,7 @@ export default function ResetPassword()
             <label className="block text-sm font-medium text-gray-700">Reconfirm Password</label>
             <input
               type="password"
-              placeholder="Enter new password"
+              placeholder="Reconfirm Password"
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 outline-none text-black"
               required
             />
