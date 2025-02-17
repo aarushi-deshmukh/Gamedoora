@@ -1,25 +1,25 @@
 import { Resend } from "resend";
-import { connectToDatabase } from "@/lib/mongo";
+import connectDB from "@/lib/mongo";
 import User from "@/models/User";
+import { NextRequest, NextResponse } from 'next/server'; // Import NextRequest and NextResponse
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method Not Allowed" });
-  }
+// Named export for POST method
+export const POST = async (req) => { // req is an instance of NextRequest
 
-  const { email } = req.body;
+  const { email } = await req.json(); // Use req.json() to get body data from NextRequest
+
   if (!email) {
-    return res.status(400).json({ error: "Email is required" });
+    return NextResponse.json({ error: "Email is required" }, { status: 400 });
   }
 
   try {
-    await connectToDatabase();
+    await connectDB();
 
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json({ error: "Email not found in our database." });
+      return NextResponse.json({ error: "Email not found in our database." }, { status: 404 });
     }
 
     // Generate a reset token (optional: store in DB)
@@ -30,15 +30,15 @@ export default async function handler(req, res) {
 
     // Send email using Resend
     await resend.emails.send({
-      from: "no-reply@yourdomain.com", // Change to your verified sender
+      from: "no-reply@gamedoora.com", // Change to your verified sender
       to: email,
       subject: "Password Reset Request",
       html: `<p>Click <a href="https://yourapp.com/reset-password?token=${resetToken}">here</a> to reset your password.</p>`,
     });
 
-    res.status(200).json({ message: "Password reset email sent!" });
+    return NextResponse.json({ message: "Password reset email sent!" }, { status: 200 });
   } catch (error) {
     console.error("Error:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
-}
+};
