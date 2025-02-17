@@ -12,6 +12,9 @@
     "autoprefixer": "^10.4.20",
     "axios": "^1.6.2",
     "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.7",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^4.17.2",
     "mongoose": "^8.10.1",
     "next": "15.1.7",
     "react": "^19.0.0",
@@ -21,6 +24,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@types/bcryptjs": "^2.4.6",
+    "autoprefixer": "^10.4.20",
     "eslint": "^9",
     "eslint-config-next": "15.1.7",
     "postcss": "^8",

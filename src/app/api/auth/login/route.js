@@ -3,6 +3,7 @@ import connectDB from "@/lib/mongo";
 import User from "@/models/User";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"; 
+
 export async function POST(req) {
   try {
     await connectDB();
@@ -10,19 +11,19 @@ export async function POST(req) {
 
     // Validate input
     if (!email || !password) {
-      return NextResponse.json({ error: "Email and password are required" }, { status: 400 });
+      return NextResponse.json({ error: "Both email and password are required." }, { status: 400 });
     }
 
     // Find user by email
     const user = await User.findOne({ email });
     if (!user) {
-      return NextResponse.json({ error: "Invalid credentials" }, { status: 400 });
+      return NextResponse.json({ error: "User not found with the provided email." }, { status: 400 });
     }
 
     // Compare password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return NextResponse.json({ error: "Invalid credentials" }, { status: 400 });
+      return NextResponse.json({ error: "Incorrect password." }, { status: 400 });
     }
 
     // Generate JWT token

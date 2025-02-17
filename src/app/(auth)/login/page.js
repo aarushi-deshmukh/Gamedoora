@@ -1,28 +1,53 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 
 export default function Login()
 {
-  const [clientReady, setClientReady] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
-  useEffect(() => {
-    setClientReady(true);
-  }, []);
+  const [message, setMessage] = useState("");
 
-  if (!clientReady) return null;
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setMessage("");
+
+    const res = await fetch("/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      setMessage("Login successful! ✅");
+    } else {
+      setMessage(data.error || "Login failed ❌");
+    }
+  };
+
   return (
   <main>
-    <div >
+    <div>
       <div>
       <h1 className="text-3xl font-bold text-gray-800 text-center m-5">Login</h1>
-      <form className="space-y-4">
+      <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <label className="block text-sm font-medium text-gray-700">Username</label>
             <input
-              type="text"
-              placeholder="Enter your username"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 outline-none text-black"
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
               required
             />
           </div>
@@ -31,8 +56,11 @@ export default function Login()
             <label className="block text-sm font-medium text-gray-700">Password</label>
             <input
               type="password"
-              placeholder="Enter your password"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 outline-none text-black"
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
               required
             />
           </div>
@@ -44,7 +72,7 @@ export default function Login()
             Login
           </button>
         </form>
-
+        {message && <p className="mt-4 text-center">{message}</p>}
         <p className="mt-4 text-center text-gray-500 text-sm">
           Forgot your password?{" "}
           <a href="/reset-password" className="text-indigo-600 hover:underline">Reset here</a>
