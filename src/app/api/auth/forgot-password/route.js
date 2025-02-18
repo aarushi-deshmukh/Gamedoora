@@ -1,6 +1,6 @@
 import { Resend } from "resend";
-import connectDB from "@/lib/mongo";
-import User from "@/models/User";
+import connectDB from "../../../../lib/mongo"; 
+import User from "../../../../models/User";
 import { NextRequest, NextResponse } from 'next/server'; // Import NextRequest and NextResponse
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -19,7 +19,7 @@ export const POST = async (req) => { // req is an instance of NextRequest
 
     const user = await User.findOne({ email });
     if (!user) {
-      return NextResponse.json({ error: "Email not found in our database." }, { status: 404 });
+      return NextResponse.json({ error: "Invalid email. Please enter a registered email address." }, { status: 404 });
     }
 
     // Generate a reset token (optional: store in DB)
