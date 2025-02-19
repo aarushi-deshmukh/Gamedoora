@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -9,6 +9,11 @@ export default function Login() {
 
   const [message, setMessage] = useState("");
   const [loginAttempts, setLoginAttempts] = useState(0); // Track failed attempts
+  const [showForgotPassword, setShowForgotPassword] = useState(false); // Prevent hydration mismatch
+
+  useEffect(() => {
+    setShowForgotPassword(loginAttempts >= 2);
+  }, [loginAttempts]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -75,10 +80,10 @@ export default function Login() {
 
         {message && <p className="mt-4 text-center text-black">{message}</p>}
 
-        {loginAttempts >= 2 && (
-            <a href="/forgot-password" className="text-indigo-600 hover:underline mt-4 text-center text-sm">
+        {showForgotPassword && (
+          <a href="/forgot-password" className="text-indigo-600 hover:underline mt-4 text-center text-sm">
             Forgot password?
-            </a>
+          </a>
         )}
 
         <p className="mt-4 text-center text-gray-500 text-sm">

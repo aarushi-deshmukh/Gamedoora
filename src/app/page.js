@@ -15,10 +15,10 @@ export default function Home() {
         
         {/* Right Side (Buttons) */}
         <div className="flex items-center gap-x-15">
-          <a href="/login/page.js" className="text-white font-medium hover:text-blue transition">Login</a>
-          <a href="/auth/signup/page.js" className="text-white font-medium hover:text-blue transition">Sign Up</a>
-          <div>About Us</div>
-          <div>Contact</div>
+          <a href="/login" className="text-white font-medium hover:text-blue transition">Login</a>
+          <a href="/signup" className="text-white font-medium hover:text-blue transition">Sign Up</a>
+          <div className="text-white font-medium hover:text-blue transition">About Us</div>
+          <div className="text-white font-medium hover:text-blue transition">Contact</div>
           <div></div>
         </div>
       </header>

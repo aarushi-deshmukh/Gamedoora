@@ -1,7 +1,8 @@
 "use client";
-import { useState } from "react";
 
-export default function SignupPage() {
+import { useState, useEffect } from "react";
+
+export default function EditProfilePage() {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -9,10 +10,30 @@ export default function SignupPage() {
     username: "",
     age: "",
     category: "",
-    password: "",
   });
 
   const [message, setMessage] = useState("");
+  const userId = "67b0552f808e6e7a034d3074"; 
+  
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const res = await fetch(`/api/profile/edit-profile/page.js?userId=${userId}`);
+        const data = await res.json();
+        console.log("API Response:", data); 
+
+        if (res.ok) {
+          setFormData(data);
+        } else {
+          setMessage(data.error || "Failed to load profile.");
+        }
+      } catch (error) {
+        setMessage("Error fetching profile.");
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,24 +43,28 @@ export default function SignupPage() {
     e.preventDefault();
     setMessage("");
 
-    const res = await fetch("/api/auth/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
+    try {
+      const res = await fetch(`/api/profile/edit-profile?userId=${userId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
-    const data = await res.json();
-    if (res.ok) {
-      setMessage("Sign-up successful! ✅");
-    } else {
-      setMessage(data.error || "Sign-up failed ❌");
+      const data = await res.json();
+      if (res.ok) {
+        setMessage("Profile updated successfully! ✅");
+      } else {
+        setMessage(data.error || "Profile update failed ❌");
+      }
+    } catch (error) {
+      setMessage("Error updating profile.");
     }
   };
 
   return (
-    <main>
-      <div>
-        <h1 className="text-3xl font-bold text-gray-800 text-center mb-5">Sign Up</h1>
+    <main className="flex items-center justify-center min-h-screen bg-orange-200">
+      <div className="w-full max-w-lg p-6 bg-white rounded-lg shadow-lg">
+        <h1 className="text-3xl font-bold text-gray-800 text-center mb-5">Edit Profile</h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex space-x-4">
@@ -51,7 +76,7 @@ export default function SignupPage() {
                 value={formData.firstName}
                 onChange={handleChange}
                 placeholder="First Name"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 outline-none text-black"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none text-black"
                 required
               />
             </div>
@@ -63,7 +88,7 @@ export default function SignupPage() {
                 value={formData.lastName}
                 onChange={handleChange}
                 placeholder="Last Name"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 outline-none text-black"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none text-black"
                 required
               />
             </div>
@@ -77,7 +102,7 @@ export default function SignupPage() {
               value={formData.email}
               onChange={handleChange}
               placeholder="Email Address"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 outline-none text-black"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none text-black"
               required
             />
           </div>
@@ -91,7 +116,7 @@ export default function SignupPage() {
                 value={formData.username}
                 onChange={handleChange}
                 placeholder="Username"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 outline-none text-black"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none text-black"
                 required
               />
             </div>
@@ -103,7 +128,7 @@ export default function SignupPage() {
                 value={formData.age}
                 onChange={handleChange}
                 placeholder="Age"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 outline-none text-black"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none text-black"
                 required
               />
             </div>
@@ -115,7 +140,7 @@ export default function SignupPage() {
               name="category"
               value={formData.category}
               onChange={handleChange}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 outline-none text-black"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none text-black"
               required
             >
               <option value="">Select Category</option>
@@ -127,34 +152,14 @@ export default function SignupPage() {
             </select>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Password</label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Password"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 outline-none text-black"
-              required
-            />
-          </div>
-
           <button
             type="submit"
             className="w-full bg-orange-400 text-white p-3 rounded-lg hover:bg-orange-600 transition duration-300"
           >
-            Sign Up
+            Update Profile
           </button>
 
           {message && <p className="mt-3 text-center text-sm text-black">{message}</p>}
-
-          <p className="mt-4 text-center text-gray-500 text-sm">
-            Already have an account?{" "}
-            <a href="/login" className="text-indigo-600 hover:underline">
-              Login here
-            </a>
-          </p>
         </form>
       </div>
     </main>
