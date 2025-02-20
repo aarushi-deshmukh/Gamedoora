@@ -13,12 +13,12 @@ export default function EditProfilePage() {
   });
 
   const [message, setMessage] = useState("");
-  const userId = "67b0552f808e6e7a034d3074"; 
+  const userId = "67b0552f808e6e7a034d3074";   // changes to be made when connecting to login page
   
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await fetch(`/api/profile/edit-profile/page.js?userId=${userId}`);
+        const res = await fetch(`/api/profile/edit-profile?userId=${userId}`);
         const data = await res.json();
         console.log("API Response:", data); 
 
