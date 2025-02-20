@@ -31,6 +31,7 @@ export default function SignupPage() {
     const data = await res.json();
     if (res.ok) {
       setMessage("Sign-up successful! ✅");
+      window.location.href = "../../profile/profile-page";
     } else {
       setMessage(data.error || "Sign-up failed ❌");
     }

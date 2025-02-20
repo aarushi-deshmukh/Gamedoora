@@ -1,15 +1,17 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation"; // ✅ Correct import for App Router
 
 export default function Login() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
   const [message, setMessage] = useState("");
-  const [loginAttempts, setLoginAttempts] = useState(0); // Track failed attempts
-  const [showForgotPassword, setShowForgotPassword] = useState(false); // Prevent hydration mismatch
+  const [loginAttempts, setLoginAttempts] = useState(0);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   useEffect(() => {
     setShowForgotPassword(loginAttempts >= 2);
@@ -32,10 +34,11 @@ export default function Login() {
     const data = await res.json();
     if (res.ok) {
       setMessage("Login successful! ✅");
-      setLoginAttempts(0); // Reset on successful login
+      setLoginAttempts(0);
+      setTimeout(() => router.push("/profile/profile-page"), 1000); // ✅ Correct path
     } else {
       setMessage(data.error || "Login failed ❌");
-      setLoginAttempts((prev) => prev + 1); // Increase failed attempts
+      setLoginAttempts((prev) => prev + 1);
     }
   };
 
