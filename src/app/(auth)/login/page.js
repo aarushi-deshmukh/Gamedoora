@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation"; // ✅ Correct import for App Router
+import { useRouter } from "next/navigation"; 
 
 export default function Login() {
   const router = useRouter();
@@ -34,8 +34,24 @@ export default function Login() {
     const data = await res.json();
     if (res.ok) {
       setMessage("Login successful! ✅");
-      setLoginAttempts(0);
-      setTimeout(() => router.push("/profile/profile-page"), 1000); // ✅ Correct path
+      if (data.user) {
+        localStorage.setItem("user", JSON.stringify({
+          id: data.user.id,
+          email: data.user.email,
+          name: data.user.name,
+          firstName: data.user.firstName,
+          lastName: data.user.lastName,
+          username: data.user.username,
+          age: data.user.age,
+          category: data.user.category,
+        }));
+      }
+      localStorage.setItem("token", data.token);
+      
+
+        console.log("Redirecting to profile...");
+        setTimeout(() => router.push("/profile/profile-page"), 1000);
+
     } else {
       setMessage(data.error || "Login failed ❌");
       setLoginAttempts((prev) => prev + 1);

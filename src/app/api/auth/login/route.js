@@ -38,9 +38,15 @@ export async function POST(req) {
       user: {
         id: user._id,
         email: user.email,
-        name: user.name, // Assuming your user model has a "name" field
+        name: user.name,
+        firstName: user.firstName, 
+        lastName: user.lastName,
+        username: user.username,
+        age: user.age,
+        category: user.category,
       }
     }, { status: 200 });
+    
 
   } catch (error) {
     console.error("Login error:", error);

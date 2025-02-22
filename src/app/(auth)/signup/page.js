@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation"; 
 
 export default function SignupPage() {
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -13,6 +15,7 @@ export default function SignupPage() {
   });
 
   const [message, setMessage] = useState("");
+  const router = useRouter(); 
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -31,8 +34,14 @@ export default function SignupPage() {
     const data = await res.json();
     if (res.ok) {
       setMessage("Sign-up successful! ✅");
-      window.location.href = "../../profile/profile-page";
-    } else {
+      localStorage.setItem("user", JSON.stringify(data.user));  
+      localStorage.setItem("token", data.token);
+
+      console.log("Redirecting to profile...");
+      setTimeout(() => router.push("/profile/profile-page"), 1000);
+
+
+  } else {
       setMessage(data.error || "Sign-up failed ❌");
     }
   };

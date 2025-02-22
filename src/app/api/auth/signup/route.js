@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import connectDB from "../../../../lib/mongo"; 
 import User from "../../../../models/User";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken"; 
 
 export async function POST(req) {
   try {
@@ -31,7 +32,23 @@ export async function POST(req) {
     const newUser = new User({ firstName, lastName, email, username, age, category, password: hashedPassword });
     await newUser.save();
 
-    return NextResponse.json({ message: "Signup successful!" }, { status: 201 });
+    const token = jwt.sign({ id: newUser._id, email: newUser.email }, process.env.JWT_SECRET, { expiresIn: "7d" });
+    const userWithoutPassword = {
+      id: newUser._id,
+      firstName: newUser.firstName,
+      lastName: newUser.lastName,
+      email: newUser.email,
+      username: newUser.username,
+      age: newUser.age,
+      category: newUser.category
+    };
+
+
+
+    return NextResponse.json(
+      { message: "Signup successful!", user:userWithoutPassword , token },
+      { status: 201 }
+    );
   } catch (error) {
     console.error("Signup error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
