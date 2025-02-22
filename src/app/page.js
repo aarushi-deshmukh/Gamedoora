@@ -1,50 +1,44 @@
-"use client";
+import './globals.css';
 
-import React, { useState } from "react";
-import Link from "next/link";
-
-const SignupPage = () => {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    username: "",
-    age: "",
-    category: "",
-    password: "",
-  });
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form submitted", formData);
-  };
-
+export default function Home() {
   return (
-    <div>
-      <h2>Sign Up</h2>
-      <form onSubmit={handleSubmit}>
-        <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} placeholder="First Name" required />
-        <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} placeholder="Last Name" required />
-        <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email" required />
-        <input type="text" name="username" value={formData.username} onChange={handleChange} placeholder="Username" required />
-        <input type="number" name="age" value={formData.age} onChange={handleChange} placeholder="Age" required />
-        <select name="category" value={formData.category} onChange={handleChange} required>
-          <option value="">Select Category</option>
-          <option value="Volunteer">Volunteer</option>
-          <option value="Admin">Admin</option>
-        </select>
-        <input type="password" name="password" value={formData.password} onChange={handleChange} placeholder="Password" required />
-        <button type="submit">Sign Up</button>
-      </form>
-      <p>
-        Already have an account? <Link href="/login">Log in</Link>
-      </p>
-    </div>
-  );
-};
+    <main className="min-h-screen bg-black text-white">
+      {/* Header */}
+      <header className="flex items-center justify-between w-full px-6 py-2 bg-transparent">
+        {/* Left Side (Logo and Title) */}
+        <div className="flex items-center space-x-3">
+          <img src="/favicon.ico" className="w-10 h-10" alt="Logo" />
+          <div className='text-xl font-semibold'>
+            Gamedoora
+          </div>
+        </div>
+        
+        {/* Right Side (Buttons) */}
+        <div className="flex items-center gap-x-15">
+          <a href="/login" className="text-white font-medium hover:text-blue transition">Login</a>
+          <a href="/signup" className="text-white font-medium hover:text-blue transition">Sign Up</a>
+          <div className="text-white font-medium hover:text-blue transition">About Us</div>
+          <div className="text-white font-medium hover:text-blue transition">Contact</div>
+          <div></div>
+        </div>
+      </header>
 
-export default SignupPage;
+      {/* Main Content */}
+      <div className="flex flex-wrap items-center justify-center space-x-32 min-h-screen p-4">
+        {/* Login Section */}
+        <div className="flex flex-col items-center space-y-6 p-6">
+          <div className="text-5xl font-bold">Game ON!</div>
+          <p className="text-center">Welcome! Please log in to continue.</p><br />
+          <button className="bg-orange-400 text-white px-6 py-3 rounded-lg hover:bg-orange-600 transition">
+            Let's Play
+          </button>
+        </div>
+        
+        {/* Image Section */}
+        <div>
+          <img src="/bg.jpg" alt="Game" className="w-[400px] h-auto rounded-lg shadow-md" />
+        </div>
+      </div>
+    </main>
+  );
+}
