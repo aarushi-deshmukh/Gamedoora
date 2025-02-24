@@ -10,6 +10,7 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const router = useRouter();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Sidebar state
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -72,10 +73,10 @@ export default function ProfilePage() {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      <Sidebar />
-      <main className="flex-1 p-6">
+      <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+      <main className={`flex-1 p-6 transition-all duration-300 ${isSidebarOpen ? "ml-48" : "ml-16"}`}>
         <Header />
-        
+
         {loading ? (
           <p className="text-center text-gray-600">Loading profile...</p>
         ) : error ? (
