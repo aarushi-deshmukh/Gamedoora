@@ -10,10 +10,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "axios": "^1.6.2",
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.7",
+    "framer-motion": "^12.4.7",
     "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.475.0",
     "mongodb": "^4.17.2",
     "mongoose": "^8.10.1",
     "next": "^15.1.7",
