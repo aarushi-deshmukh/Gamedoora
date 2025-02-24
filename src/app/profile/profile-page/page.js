@@ -1,103 +1,73 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import Sidebar from "../../components/SideBar";
+import { useState, useEffect } from "react";
 import Header from "../../components/Header";
 
 export default function ProfilePage() {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const router = useRouter();
+  const [user, setUser] = useState({ firstName: "John", lastName: "Doe", email: "john@example.com", username: "johndoe" });
+  const [activeTab, setActiveTab] = useState("profile"); // Default tab
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const token = localStorage.getItem("token");
-    if (!token) {
-      router.replace("/login");
-      return;
-    }
-
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      try {
-        const parsedUser = JSON.parse(storedUser);
-        if (parsedUser && parsedUser.email) {
-          setUser(parsedUser);
-          setLoading(false);
-          return;
-        }
-      } catch (err) {
-        console.error("Error parsing user data:", err);
-      }
+      setUser(JSON.parse(storedUser));
     }
-
-    fetchUserProfile(token);
-  }, [router]);
-
-  const fetchUserProfile = async (token) => {
-    try {
-      const response = await fetch("/api/profile/profile1", {
-        method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      if (!response.ok) {
-        if (response.status === 401 || response.status === 403) {
-          console.warn("Invalid or expired token. Logging out...");
-          handleLogout();
-          return;
-        }
-        throw new Error(`Error: ${response.status} - ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      setUser(data);
-      localStorage.setItem("user", JSON.stringify(data));
-    } catch (err) {
-      console.error("Failed to fetch profile:", err);
-      setError("Could not load profile. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    router.replace("/login");
-  };
+  }, []);
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      <Sidebar />
-      <main className="flex-1 p-6">
-        <Header />
-        
-        {loading ? (
-          <p className="text-center text-gray-600">Loading profile...</p>
-        ) : error ? (
-          <p className="text-red-500 text-center">{error}</p>
-        ) : user ? (
-          <div className="bg-white shadow-md p-6 rounded-lg text-gray-800">
-            <h2 className="text-2xl font-semibold">{user.firstName} {user.lastName}</h2>
-            <p className="text-gray-600">{user.email}</p>
-            <p className="mt-2">👤 Username: {user.username}</p>
-            <p className="mt-2">🎂 Age: {user.age || "Not specified"}</p>
-            <p className="mt-2">📌 Category: {user.category || "General"}</p>
+    <div className="min-h-screen bg-gray-100">
+      <Header />
 
-            <button
-              onClick={handleLogout}
-              className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
-            >
-              Logout
-            </button>
-          </div>
-        ) : (
-          <p className="text-gray-500 text-center">No user data found.</p>
-        )}
+      {/* Tabs for Navigation */}
+      <div className="flex justify-center space-x-6 mt-6">
+        <button onClick={() => setActiveTab("profile")} className={`px-6 py-2 rounded ${activeTab === "profile" ? "bg-orange-600 text-white" : "bg-gray-200 text-black"}`}>Profile</button>
+        <button onClick={() => setActiveTab("edit")} className={`px-6 py-2 rounded ${activeTab === "edit" ? "bg-orange-600 text-white" : "bg-gray-200 text-black"}`}>Edit</button>
+        <button onClick={() => setActiveTab("update")} className={`px-6 py-2 rounded ${activeTab === "update" ? "bg-orange-600 text-white" : "bg-gray-200 text-black"}`}>Update</button>
+        <button onClick={() => setActiveTab("delete")} className={`px-6 py-2 rounded ${activeTab === "delete" ? "bg-red-600 text-white" : "bg-gray-200 text-black"}`}>Delete</button>
+      </div>
+
+      <main className="flex justify-center mt-8">
+        <div className="w-full max-w-lg bg-white shadow-lg p-6 rounded-lg border-l-4 border-orange-500">
+
+          {/* Profile Section */}
+          {activeTab === "profile" && (
+            <>
+              <h2 className="text-2xl font-semibold text-black">{user.firstName} {user.lastName}</h2>
+              <p className="text-gray-700">{user.email}</p>
+              <p className="mt-2 text-orange-600 font-medium">👤 Username: {user.username}</p>
+            </>
+          )}
+
+          {/* Edit Profile Section */}
+          {activeTab === "edit" && (
+            <>
+              <h2 className="text-xl font-semibold text-black mb-4">Edit Profile</h2>
+              <form onSubmit={(e) => { e.preventDefault(); localStorage.setItem("user", JSON.stringify(user)); alert("Profile updated!"); }}>
+                <input type="text" name="firstName" value={user.firstName} onChange={(e) => setUser({ ...user, firstName: e.target.value })} className="w-full p-2 border rounded mb-3" placeholder="First Name" required />
+                <input type="text" name="lastName" value={user.lastName} onChange={(e) => setUser({ ...user, lastName: e.target.value })} className="w-full p-2 border rounded mb-3" placeholder="Last Name" required />
+                <button type="submit" className="w-full bg-orange-600 text-white p-2 rounded hover:bg-orange-700">Save Changes</button>
+              </form>
+            </>
+          )}
+
+          {/* Update Email Section */}
+          {activeTab === "update" && (
+            <>
+              <h2 className="text-xl font-semibold text-black mb-4">Update Email</h2>
+              <input type="email" value={user.email} onChange={(e) => setUser({ ...user, email: e.target.value })} className="w-full p-2 border rounded mb-3" placeholder="New Email" required />
+              <button onClick={() => alert("Email updated!")} className="w-full bg-orange-600 text-white p-2 rounded hover:bg-orange-700">Update Email</button>
+            </>
+          )}
+
+          {/* Delete Account Section */}
+          {activeTab === "delete" && (
+            <>
+              <h2 className="text-xl font-semibold text-black mb-4 text-center">Delete Account</h2>
+              <p className="text-red-500 text-center">⚠ This action is irreversible!</p>
+              <button onClick={() => { localStorage.removeItem("user"); alert("Account deleted!"); setUser(null); setActiveTab("profile"); }} className="mt-4 w-full bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Yes, Delete</button>
+            </>
+          )}
+        </div>
       </main>
     </div>
   );

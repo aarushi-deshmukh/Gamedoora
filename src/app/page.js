@@ -14,7 +14,7 @@ export default function Home() {
         </div>
         
         {/* Right Side (Buttons) */}
-        <div className="flex items-center gap-x-15">
+        <div className="flex items-center space-x-10">
           <a href="/login" className="text-white font-medium hover:text-blue transition">Login</a>
           <a href="/signup" className="text-white font-medium hover:text-blue transition">Sign Up</a>
           <div className="text-white font-medium hover:text-blue transition">About Us</div>
